@@ -113,12 +113,12 @@ const deleteProduct= (id) => {
 
 
 const getAllProduct = (limit, page, sort , filter) => {
-    console.log('sort', sort)
+    // console.log('sort', sort)
     return new Promise(async (resolve, reject) => {
         try {
                 const totalProduct = await Product.countDocuments()
                 // const totalProduct = await Product.count()
-                console.log('filter', filter)
+                // console.log('filter', filter)
                 if(filter){
                         const label =filter[0]
                         console.log('lable',label)
