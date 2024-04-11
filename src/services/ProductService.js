@@ -120,12 +120,13 @@ const getAllProduct = (limit, page, sort , filter) => {
                 // const totalProduct = await Product.count()
                 console.log('filter', filter)
                 if(filter){
-                        const objectFilter ={}
-                        objectFilter[filter[0]] = filter[1]
-                        console.log('objectFilter', objectFilter)
+                        const label =filter[0]
+                        console.log('lable',label)
+                        // objectFilter[filter[0]] = filter[1]
+                        // console.log('objectFilter', objectFilter)
                         const allProductFilter = await Product.find({
-                            name:'product4'
-                        })
+                            [label]:{'$regex':filter[1]}
+                        }).limit(limit).skip(page * limit)
                         resolve({
                         status: 'OK',
                         message: 'Success',
@@ -150,9 +151,7 @@ const getAllProduct = (limit, page, sort , filter) => {
                         totalPage: Math.ceil(totalProduct / limit)
                     })
                 }
-                const allProduct = await Product.find().limit(limit).skip(page * limit).sort({
-                    name: sort
-                })
+                const allProduct = await Product.find().limit(limit).skip(page * limit)
                 resolve({
                     status: 'OK',
                     message: 'Success',
