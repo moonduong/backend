@@ -112,20 +112,54 @@ const deleteProduct= (id) => {
 }
 
 
-const getAllProduct = (limit=2 , page = 0) => {
-    // console.log('page',typeof page)
+const getAllProduct = (limit, page, sort , filter) => {
+    console.log('sort', sort)
     return new Promise(async (resolve, reject) => {
         try {
                 const totalProduct = await Product.countDocuments()
                 // const totalProduct = await Product.count()
-                const allProduct = await Product.find().limit(limit).skip(page * limit)
+                console.log('filter', filter)
+                if(filter){
+                        const objectFilter ={}
+                        objectFilter[filter[0]] = filter[1]
+                        console.log('objectFilter', objectFilter)
+                        const allProductFilter = await Product.find({
+                            name:'product4'
+                        })
+                        resolve({
+                        status: 'OK',
+                        message: 'Success',
+                        data: allProductFilter,
+                        total: totalProduct,
+                        pageCurrent:Number( page + 1),
+                        totalPage: Math.ceil(totalProduct / limit)
+                    })
+                }
+                if (sort){
+                    console.log('ok')
+                    const objectSort ={}
+                    objectSort[sort[1]] = sort[0]
+                    console.log('objectSort', objectSort)
+                    const allProductSort = await Product.find().limit(limit).skip(page * limit).sort(objectSort)
+                    resolve({
+                        status: 'OK',
+                        message: 'Success',
+                        data: allProductSort,
+                        total: totalProduct,
+                        pageCurrent:Number( page + 1),
+                        totalPage: Math.ceil(totalProduct / limit)
+                    })
+                }
+                const allProduct = await Product.find().limit(limit).skip(page * limit).sort({
+                    name: sort
+                })
                 resolve({
                     status: 'OK',
                     message: 'Success',
                     data: allProduct,
                     total: totalProduct,
-                    pageCurrent: page + 1,
-                    // totalPage: Math.ceil(totalProduct / limit)
+                    pageCurrent:Number( page + 1),
+                    totalPage: Math.ceil(totalProduct / limit)
                 })
             
 
