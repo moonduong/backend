@@ -112,19 +112,20 @@ const deleteProduct= (id) => {
 }
 
 
-const getAllProduct = (limit=8, page=0) => {
-    console.log('page',typeof page)
+const getAllProduct = (limit=2 , page = 0) => {
+    // console.log('page',typeof page)
     return new Promise(async (resolve, reject) => {
         try {
-                const totalProduct = await Product.count()
+                const totalProduct = await Product.countDocuments()
+                // const totalProduct = await Product.count()
                 const allProduct = await Product.find().limit(limit).skip(page * limit)
                 resolve({
                     status: 'OK',
                     message: 'Success',
                     data: allProduct,
                     total: totalProduct,
-                    pageCurrent: Number(page + 1),
-                    totalPage: Math.ceil(totalProduct / limit)
+                    pageCurrent: page + 1,
+                    // totalPage: Math.ceil(totalProduct / limit)
                 })
             
 
