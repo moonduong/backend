@@ -3,9 +3,9 @@ const dotenv = require('dotenv');
 dotenv.config()
 
 const genneralAccessToken = (payload) =>{
-    console.log('payload', payload)
+    // console.log('payload', payload)
     const access_token= jwt.sign({
-        payload
+       ... payload
 
     }, process.env.ACCESS_TOKEN, {expiresIn:'30s'} )
 
@@ -14,9 +14,9 @@ const genneralAccessToken = (payload) =>{
 
 
 const genneralRefreshToken = (payload) =>{
-    console.log('payload', payload)
+    // console.log('payload', payload)
     const refesh_token= jwt.sign({
-        payload
+        ...payload
 
     }, process.env.REFESH_TOKEN, {expiresIn:'365d'} )
 

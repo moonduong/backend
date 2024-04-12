@@ -10,11 +10,11 @@ const authMiddleware = (req, res, next)=>{
         if(err){
             return res.status(404).json({
                 message:'the authemtication',
-                status:'error'
+                status:'ERROR'
             })
         }
-        const {payload} =user
-        if(payload?.isAdmin){
+        
+        if(user?.isAdmin){
             next()
         }
         else{
@@ -27,7 +27,7 @@ const authMiddleware = (req, res, next)=>{
 }
 
 const authUserMiddleware = (req, res, next)=>{
-    // console.log('checkToken', req.headers.token)
+    // console.log('req.headers', req.headers)
     const token= req.headers.token?.split(" ")[1];
     const userId= req.params.id
 
@@ -35,17 +35,18 @@ const authUserMiddleware = (req, res, next)=>{
         if(err){
             return res.status(404).json({
                 message:'the authemtication',
-                status:'error'
+                status:'ERROR'
             })
         }
-        const {payload} =user
-        if(payload?.isAdmin || payload?.id === userId){
+        console.log('user', user)
+        // const {payload} =user
+        if(user?.isAdmin || user?.id === userId){
             next()
         }
         else{
             return res.status(404).json({
                 message:'the authemtication',
-                status:'error'
+                status:'ERROR'
             })
         }
     });

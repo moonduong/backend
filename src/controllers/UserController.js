@@ -88,8 +88,14 @@ const loginUser=async (req, res)=>{
          })
         }
      const respone = await UserService.loginUser(req.body)
-     console.log('respone', respone)
-     return res.status(200).json(respone)
+     const { refesh_token, ...newReponse}= respone
+    //  console.log('respone', respone)
+    res.cookie('refesh_token', refesh_token, {
+        httpOnly: true,
+        Secure: true,
+
+    })
+     return res.status(200).json(newReponse)
     }catch(e){
      return res.status(404).json({
          message: e
@@ -168,17 +174,19 @@ const loginUser=async (req, res)=>{
  }
 
  const refresh_Token=async (req, res)=>{
+    // console.log('req.cookies', req.cookies)
     try{
-    const token= req.headers.token.split(" ")[1]
+    const token= req.cookies.refesh_token
     if(!token){
         return res.status(200).json({
             status:'err',
             message:'The token is required'
         })
     }
-    // console.log('userId ', userId)
      const respone = await JwtService.refesh_tokenjwtService(token)
      return res.status(200).json(respone)
+    return
+
     }catch(e){
      return res.status(404).json({
          message: e
