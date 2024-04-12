@@ -2,49 +2,77 @@ const User= require("../models/UserModel")
 const bcrypt = require ("bcrypt")
 const { genneralAccessToken, genneralRefreshToken } = require("./JwtService")
 
-const createUser=(newUser)=>{
-    return new Promise(async(resolve, reject)=>{
-        const {name, email, password, confirmPassword, phone}=newUser
-        try{
-            const checkUser = await User.findOne({
-                email: email
-            })
+// const createUser=(newUser)=>{
+//     return new Promise(async(resolve, reject)=>{
+//         const {name, email, password, confirmPassword, phone}=newUser
+//         try{
+//             const checkUser = await User.findOne({
+//                 email: email
+//             })
 
-            if(checkUser !== null){
-                resolve({
-                    status:'OK',
-                    message:'The email is already'
-                })
+//             if(checkUser !== null){
+//                 resolve({
+//                     status:'ERR',
+//                     message:'The email is already'
+//                 })
+//             }
+//             const hash = bcrypt.hashSync(password, 10)
+//             const createUser = await User.create({
+//                 name,
+//                 email, 
+//                 password: hash, 
+//                 // confirmPassword: hash, 
+//                 phone
+//             })
+//             if(createUser){
+//                 resolve({
+//                     status:'OK',
+//                     message:'SUCCESS',
+//                     data: createdUser
+//                 })
+//             }
+
+//         }catch(e){
+//             reject(e)
+//         }
+//     })
+// }
+
+const createUser = (newUser) => {
+    return new Promise(async (resolve, reject) => {
+        const { name, email, password, phone } = newUser;
+        try {
+            const checkUser = await User.findOne({ email: email });
+            if (checkUser !== null) {
+                return resolve({
+                    status: 'ERR',
+                    message: 'The email is already'
+                });
             }
-            const hash = bcrypt.hashSync(password, 10)
-            
-            // resolve({
-            //     data:checkUser
-            // })
-            const createUser = await User.create({
+            const hash = bcrypt.hashSync(password, 10);
+            const createdUser = await User.create({
                 name,
-                email, 
-                password: hash, 
-                // confirmPassword: hash, 
+                email,
+                password: hash,
                 phone
-            })
-            if(createUser){
-                resolve({
-                    status:'OK',
-                    message:'SUCCESS',
+            });
+            if (createdUser) {
+                return resolve({
+                    status: 'OK',
+                    message: 'SUCCESS',
                     data: createdUser
-                })
+                });
             }
-
-        }catch(e){
-            reject(e)
+        } catch (e) {
+            return reject(e);
         }
-    })
-}
+    });
+};
+
 
 const loginUser=(userLogin)=>{
     return new Promise(async(resolve, reject)=>{
-        const {name, email, password, confirmPassword, phone}=userLogin
+        const {email, password}=userLogin
         try{
             const checkUser = await User.findOne({
                 email: email
@@ -52,16 +80,16 @@ const loginUser=(userLogin)=>{
 
             if(checkUser == null){
                 resolve({
-                    status:'OK',
+                    status:'ERR',
                     message:'The user is not define'
                 })
             } 
             const comparePassword = bcrypt.compareSync(password, checkUser.password)
-            console.log('comparePassword', comparePassword)
+            
             
             if(!comparePassword){
                 resolve({
-                    status:'OK',
+                    status:'ERR',
                     message:'The password or user id incorrect'
                 })
             }

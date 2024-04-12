@@ -25,7 +25,6 @@ const genneralRefreshToken = (payload) =>{
 
 const refesh_tokenjwtService = (token) =>{
     return new Promise((resolve, reject)=>{
-        // const {name, email, password, confirmPassword, phone}=userLogin
         try{
         
              console.log('token', token)
@@ -33,7 +32,7 @@ const refesh_tokenjwtService = (token) =>{
                     if(err){
                         console.log('err', err)
                         resolve({
-                            status:'error',
+                            status:'ERR',
                             message:'the authemtication'
                         })
                     }
