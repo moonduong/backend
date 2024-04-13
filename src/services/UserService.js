@@ -195,30 +195,23 @@ const getAllUser=( )=>{
 }
 
 const getDetailsUser=( id)=>{
-    return new Promise(async(resolve, reject)=>{
-        // const {name, email, password, confirmPassword, phone}=userLogin
-        try{
+    return new Promise(async (resolve, reject) => {
+        try {
             const user = await User.findOne({
                 _id: id
             })
-            // console.log('checkUser', checkUser)
-           
-            if(user=== null){
+            if (user === null) {
                 resolve({
-                    status:'OK',
-                    message:'The user is not define'
+                    status: 'ERR',
+                    message: 'The user is not defined'
                 })
-            } 
-            // console.log('updateUser', updateUser)
-
-                resolve({
-                    status:'OK',
-                    message:' SUCCESS',
-                    data: user
-    
-                })
-
-        }catch(e){
+            }
+            resolve({
+                status: 'OK',
+                message: 'SUCESS',
+                data: user
+            })
+        } catch (e) {
             reject(e)
         }
     })

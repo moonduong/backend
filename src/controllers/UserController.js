@@ -154,24 +154,23 @@ const loginUser=async (req, res)=>{
     } 
  }
 
- const getDetailsUser=async (req, res)=>{
-    try{
-    const userId = req.params.id
-    if(!userId){
-        return res.status(200).json({
-            status:'err',
-            message:'The userId is required'
+ const getDetailsUser = async (req, res) => {
+    try {
+        const userId = req.params.id
+        if (!userId) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The userId is required'
+            })
+        }
+        const response = await UserService.getDetailsUser(userId)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
         })
     }
-    // console.log('userId ', userId)
-     const respone = await UserService.getDetailsUser(userId)
-     return res.status(200).json(respone)
-    }catch(e){
-     return res.status(404).json({
-         message: e
-     })
-    } 
- }
+}
 
  const refresh_Token=async (req, res)=>{
     console.log('req.cookies.refesh_token',req.cookies.refesh_token)
@@ -195,6 +194,23 @@ const loginUser=async (req, res)=>{
     } 
  }
 
+ const logoutUser=async (req, res)=>{
+  
+    try{
+    res.clearCookie('refesh_token')
+     return res.status(200).json({
+        status:"OK",
+        message:"Logout success"
+     })
+
+    }catch(e){
+     return res.status(404).json({
+         message: e
+     })
+    } 
+ }
+
+
 module.exports= {
     createUser,
     loginUser,
@@ -202,5 +218,6 @@ module.exports= {
     deleteUser,
     getAllUser,
     getDetailsUser,
-    refresh_Token
+    refresh_Token,
+    logoutUser
 }

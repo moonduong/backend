@@ -27,26 +27,21 @@ const authMiddleware = (req, res, next)=>{
 }
 
 const authUserMiddleware = (req, res, next)=>{
-    // console.log('req.headers', req.headers)
-    const token= req.headers.token?.split(" ")[1];
-    const userId= req.params.id
-
-    jwt.verify(token, process.env.ACCESS_TOKEN, function(err, user){
-        if(err){
+    const token = req.headers.token.split(' ')[1]
+    const userId = req.params.id
+    jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
+        if (err) {
             return res.status(404).json({
-                message:'the authemtication',
-                status:'ERROR'
+                message: 'The authemtication',
+                status: 'ERROR'
             })
         }
-        console.log('user', user)
-        // const {payload} =user
-        if(user?.isAdmin || user?.id === userId){
+        if (user?.isAdmin || user?.id === userId) {
             next()
-        }
-        else{
+        } else {
             return res.status(404).json({
-                message:'the authemtication',
-                status:'ERROR'
+                message: 'The authemtication',
+                status: 'ERROR'
             })
         }
     });
