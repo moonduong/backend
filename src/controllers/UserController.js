@@ -92,8 +92,8 @@ const loginUser=async (req, res)=>{
     //  console.log('respone', respone)
     res.cookie('refesh_token', refesh_token, {
         httpOnly: true,
-        Secure: true,
-
+        secure: false,
+        samesite:'strict'
     })
      return res.status(200).json(newReponse)
     }catch(e){
@@ -174,6 +174,7 @@ const loginUser=async (req, res)=>{
  }
 
  const refresh_Token=async (req, res)=>{
+    console.log('req.cookies.refesh_token',req.cookies.refesh_token)
     // console.log('req.cookies', req.cookies)
     try{
     const token= req.cookies.refesh_token
